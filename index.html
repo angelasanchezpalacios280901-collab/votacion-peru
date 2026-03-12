@@ -1,27 +1,23 @@
 <!DOCTYPE html>
-
-<html lang="es">
+<html>
 <head>
 <meta charset="UTF-8">
-<title>PERÚ - REGISTRO DE VOTOS</title>
+<title>Votación Perú 2026</title>
 
 <style>
+
 body{
-font-family: Arial;
-background:#f2f2f2;
+font-family:Arial;
+background:#ffffff;
 text-align:center;
 }
 
 header{
-background:red;
+background:#d60000;
 color:white;
-padding:15px;
-font-size:24px;
-}
-
-select{
-padding:8px;
-margin:10px;
+padding:12px;
+font-size:22px;
+font-weight:bold;
 }
 
 .container{
@@ -30,36 +26,27 @@ flex-wrap:wrap;
 justify-content:center;
 }
 
-.candidato{
-background:white;
+.card{
+border:1px solid #ddd;
 border-radius:10px;
-padding:15px;
+width:210px;
 margin:10px;
-width:200px;
-box-shadow:0 0 10px rgba(0,0,0,0.2);
+padding:12px;
 }
 
 button{
-padding:8px 15px;
-margin:5px;
+background:#d60000;
+color:white;
 border:none;
+padding:8px 15px;
 border-radius:5px;
 cursor:pointer;
 }
 
-.si{
-background:green;
-color:white;
-}
-
-.no{
-background:red;
-color:white;
-}
-
-.resultados{
-margin-top:20px;
-font-size:20px;
+select{
+padding:8px;
+margin:10px;
+font-size:16px;
 }
 
 </style>
@@ -68,8 +55,112 @@ font-size:20px;
 
 <body>
 
-<header>PERÚ - REGISTRO DE VOTOS</header>
+<header>
+PERÚ REGISTRO DE VOTOS 2026
+</header>
 
 <h3>Selecciona tu departamento</h3>
 
-<
+<select>
+<option>Lima</option>
+<option>Callao</option>
+<option>Amazonas</option>
+<option>Áncash</option>
+<option>Apurímac</option>
+<option>Arequipa</option>
+<option>Ayacucho</option>
+<option>Cajamarca</option>
+<option>Cusco</option>
+<option>Huancavelica</option>
+<option>Huánuco</option>
+<option>Ica</option>
+<option>Junín</option>
+<option>La Libertad</option>
+<option>Lambayeque</option>
+<option>Loreto</option>
+<option>Madre de Dios</option>
+<option>Moquegua</option>
+<option>Pasco</option>
+<option>Piura</option>
+<option>Puno</option>
+<option>San Martín</option>
+<option>Tacna</option>
+<option>Tumbes</option>
+<option>Ucayali</option>
+</select>
+
+<h2>Elige tu candidato</h2>
+
+<div class="container" id="candidatos"></div>
+
+<script>
+
+let candidatos=[
+
+"Keiko Fujimori",
+"César Acuña",
+"Jorge Nieto Montesinos",
+"Rosario Fernández",
+"Herbert Caller",
+"Alfonso López-Chau",
+"José Luna Gálvez",
+"Roberto Sánchez",
+"Carlos Jaico",
+"Fernando Olivera",
+"Charlie Carrasco",
+"Marisol Pérez Tello",
+"Paul Jaimes",
+"Mesías Guevara",
+"Álvaro Paz de la Barra",
+"George Forsyth",
+"Carlos Álvarez",
+"Francisco Diez-Canseco",
+"Wolfgang Grozo",
+"Ricardo Belmont",
+"Napoleón Becerra",
+"Ronald Atencio",
+"Yonhy Lescano",
+"Mario Vizcarra",
+"Joaquín Massé Fernández",
+"Enrique Valderrama",
+"Alex Gonzales",
+"Roberto Chiabra",
+"Rafael Belaunde",
+"Carlos Espá",
+"Antonio Ortiz Villano",
+"Fiorella Molinelli",
+"Vladimir Cerrón",
+"Walter Chirinos",
+"Rafael López Aliaga",
+"José Williams"
+
+]
+
+let votos=new Array(candidatos.length).fill(0)
+
+let cont=document.getElementById("candidatos")
+
+candidatos.forEach((c,i)=>{
+
+cont.innerHTML+=`
+<div class="card">
+<h3>${c}</h3>
+<p id="v${i}">0 votos</p>
+<button onclick="votar(${i})">VOTAR</button>
+</div>
+`
+
+})
+
+function votar(i){
+
+votos[i]++
+
+document.getElementById("v"+i).innerText=votos[i]+" votos"
+
+}
+
+</script>
+
+</body>
+</html>
