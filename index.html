@@ -1,14 +1,15 @@
 <!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Peru Registro de Votos 2026</title>
+<title>Votacion Peru 2026</title>
 
 <style>
 
 body{
 font-family:Arial;
-background:#f5f5f5;
+background:#f2f2f2;
 text-align:center;
 }
 
@@ -16,8 +17,13 @@ header{
 background:#c40000;
 color:white;
 padding:15px;
-font-size:24px;
+font-size:26px;
 font-weight:bold;
+}
+
+.total{
+font-size:20px;
+margin:10px;
 }
 
 .container{
@@ -29,10 +35,15 @@ justify-content:center;
 .card{
 background:white;
 border-radius:10px;
-box-shadow:0 2px 5px rgba(0,0,0,0.2);
-width:200px;
-margin:10px;
-padding:10px;
+box-shadow:0 2px 6px rgba(0,0,0,0.2);
+width:220px;
+margin:12px;
+padding:12px;
+}
+
+img{
+width:100%;
+border-radius:8px;
 }
 
 button{
@@ -42,6 +53,15 @@ border:none;
 padding:8px 15px;
 border-radius:5px;
 cursor:pointer;
+margin-top:5px;
+}
+
+.barra{
+height:10px;
+background:#c40000;
+margin-top:5px;
+border-radius:5px;
+width:0%;
 }
 
 </style>
@@ -54,20 +74,11 @@ cursor:pointer;
 PERU REGISTRO DE VOTOS
 </header>
 
-<h3>Selecciona tu departamento</h3>
+<div class="total">
+VOTOS TOTALES: <span id="total">0</span>
+</div>
 
-<select>
-<option>Lima</option>
-<option>Arequipa</option>
-<option>Cusco</option>
-<option>Huanuco</option>
-<option>Piura</option>
-<option>Junin</option>
-<option>Puno</option>
-<option>La Libertad</option>
-</select>
-
-<h2>Elige tu candidato</h2>
+<h3>Elige tu candidato</h3>
 
 <div class="container" id="candidatos"></div>
 
@@ -116,16 +127,28 @@ let candidatos=[
 
 let votos=new Array(candidatos.length).fill(0)
 
+let total=0
+
 let cont=document.getElementById("candidatos")
 
 candidatos.forEach((c,i)=>{
 
 cont.innerHTML+=`
+
 <div class="card">
+
+<img src="https://via.placeholder.com/200x150">
+
 <h3>${c}</h3>
+
 <p id="v${i}">0 votos</p>
+
 <button onclick="votar(${i})">VOTAR</button>
+
+<div class="barra" id="b${i}"></div>
+
 </div>
+
 `
 
 })
@@ -134,7 +157,27 @@ function votar(i){
 
 votos[i]++
 
+total++
+
 document.getElementById("v"+i).innerText=votos[i]+" votos"
+
+document.getElementById("total").innerText=total
+
+actualizar()
+
+}
+
+function actualizar(){
+
+let suma=votos.reduce((a,b)=>a+b,0)
+
+votos.forEach((v,i)=>{
+
+let p=suma ? (v/suma)*100 : 0
+
+document.getElementById("b"+i).style.width=p+"%"
+
+})
 
 }
 
