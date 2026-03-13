@@ -2,26 +2,25 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>Registro de votos Perú</title>
+<title>Simulación Electoral Perú 2026</title>
 
 <style>
 
 body{
 font-family:Arial;
-background:#f4f4f4;
+background:#f0f0f0;
 text-align:center;
 }
 
 h1{
-background:#c40000;
+background:#d40000;
 color:white;
-padding:12px;
+padding:15px;
 }
 
-select{
-padding:10px;
-font-size:16px;
-margin:15px;
+#total{
+font-size:20px;
+margin:10px;
 }
 
 .grid{
@@ -33,9 +32,9 @@ padding:20px;
 
 .card{
 background:white;
-padding:15px;
+padding:20px;
 border-radius:10px;
-box-shadow:0 0 8px rgba(0,0,0,0.2);
+box-shadow:0 0 10px rgba(0,0,0,0.2);
 }
 
 .card img{
@@ -46,7 +45,7 @@ object-fit:cover;
 }
 
 .logo{
-width:45px;
+width:40px;
 margin-top:5px;
 }
 
@@ -59,123 +58,78 @@ cursor:pointer;
 }
 
 .votar{
-background:green;
+background:#0a8f2d;
 color:white;
 }
 
 .no{
-background:red;
+background:#c70000;
 color:white;
 }
 
 #ranking{
-margin-top:40px;
+margin:40px;
 font-size:18px;
+background:white;
+padding:20px;
+border-radius:10px;
 }
 
 </style>
+
 </head>
 
 <body>
 
-<h1>Registro de votos - Perú</h1>
+<h1>Simulación Electoral Perú 2026</h1>
 
-<select>
+<div id="total">Total votos: 0</div>
 
-<option>Seleccionar departamento</option>
-
-<option>Amazonas</option>
-<option>Áncash</option>
-<option>Apurímac</option>
-<option>Arequipa</option>
-<option>Ayacucho</option>
-<option>Cajamarca</option>
-<option>Callao</option>
-<option>Cusco</option>
-<option>Huancavelica</option>
-<option>Huánuco</option>
-<option>Ica</option>
-<option>Junín</option>
-<option>La Libertad</option>
-<option>Lambayeque</option>
-<option>Lima</option>
-<option>Loreto</option>
-<option>Madre de Dios</option>
-<option>Moquegua</option>
-<option>Pasco</option>
-<option>Piura</option>
-<option>Puno</option>
-<option>San Martín</option>
-<option>Tacna</option>
-<option>Tumbes</option>
-<option>Ucayali</option>
-
-</select>
-
-<div class="grid" id="candidatos"></div>
+<div class="grid" id="contenedor"></div>
 
 <br>
-<button onclick="mostrarResultados()">VER RESULTADOS</button>
+
+<button onclick="resultados()">VER RESULTADOS</button>
 
 <div id="ranking"></div>
 
 <script>
 
+let total=0;
+
 let candidatos=[
 
-{nombre:"Keiko Fujimori",foto:"foto1.jpg",logo:"logo1.png",votos:0},
-{nombre:"Rafael López Aliaga",foto:"foto2.jpg",logo:"logo2.png",votos:0},
-{nombre:"Carlos Álvarez",foto:"foto3.jpg",logo:"logo3.png",votos:0},
+{nombre:"Keiko Fujimori",foto:"https://upload.wikimedia.org/wikipedia/commons/9/99/Keiko_Fujimori.jpg",logo:"https://upload.wikimedia.org/wikipedia/commons/2/2b/Fuerza_Popular_logo.png",votos:0},
 
-{nombre:"Candidato 4",foto:"foto4.jpg",logo:"logo4.png",votos:0},
-{nombre:"Candidato 5",foto:"foto5.jpg",logo:"logo5.png",votos:0},
-{nombre:"Candidato 6",foto:"foto6.jpg",logo:"logo6.png",votos:0},
-{nombre:"Candidato 7",foto:"foto7.jpg",logo:"logo7.png",votos:0},
-{nombre:"Candidato 8",foto:"foto8.jpg",logo:"logo8.png",votos:0},
-{nombre:"Candidato 9",foto:"foto9.jpg",logo:"logo9.png",votos:0},
-{nombre:"Candidato 10",foto:"foto10.jpg",logo:"logo10.png",votos:0},
+{nombre:"Rafael López Aliaga",foto:"https://upload.wikimedia.org/wikipedia/commons/e/e2/Rafael_Lopez_Aliaga.jpg",logo:"https://upload.wikimedia.org/wikipedia/commons/3/39/Renovacion_Popular_logo.png",votos:0},
 
-{nombre:"Candidato 11",foto:"foto11.jpg",logo:"logo11.png",votos:0},
-{nombre:"Candidato 12",foto:"foto12.jpg",logo:"logo12.png",votos:0},
-{nombre:"Candidato 13",foto:"foto13.jpg",logo:"logo13.png",votos:0},
-{nombre:"Candidato 14",foto:"foto14.jpg",logo:"logo14.png",votos:0},
-{nombre:"Candidato 15",foto:"foto15.jpg",logo:"logo15.png",votos:0},
-{nombre:"Candidato 16",foto:"foto16.jpg",logo:"logo16.png",votos:0},
-{nombre:"Candidato 17",foto:"foto17.jpg",logo:"logo17.png",votos:0},
-{nombre:"Candidato 18",foto:"foto18.jpg",logo:"logo18.png",votos:0},
-{nombre:"Candidato 19",foto:"foto19.jpg",logo:"logo19.png",votos:0},
-{nombre:"Candidato 20",foto:"foto20.jpg",logo:"logo20.png",votos:0},
-
-{nombre:"Candidato 21",foto:"foto21.jpg",logo:"logo21.png",votos:0},
-{nombre:"Candidato 22",foto:"foto22.jpg",logo:"logo22.png",votos:0},
-{nombre:"Candidato 23",foto:"foto23.jpg",logo:"logo23.png",votos:0},
-{nombre:"Candidato 24",foto:"foto24.jpg",logo:"logo24.png",votos:0},
-{nombre:"Candidato 25",foto:"foto25.jpg",logo:"logo25.png",votos:0},
-{nombre:"Candidato 26",foto:"foto26.jpg",logo:"logo26.png",votos:0},
-{nombre:"Candidato 27",foto:"foto27.jpg",logo:"logo27.png",votos:0},
-{nombre:"Candidato 28",foto:"foto28.jpg",logo:"logo28.png",votos:0},
-{nombre:"Candidato 29",foto:"foto29.jpg",logo:"logo29.png",votos:0},
-{nombre:"Candidato 30",foto:"foto30.jpg",logo:"logo30.png",votos:0},
-
-{nombre:"Candidato 31",foto:"foto31.jpg",logo:"logo31.png",votos:0},
-{nombre:"Candidato 32",foto:"foto32.jpg",logo:"logo32.png",votos:0},
-{nombre:"Candidato 33",foto:"foto33.jpg",logo:"logo33.png",votos:0},
-{nombre:"Candidato 34",foto:"foto34.jpg",logo:"logo34.png",votos:0},
-{nombre:"Candidato 35",foto:"foto35.jpg",logo:"logo35.png",votos:0},
-{nombre:"Candidato 36",foto:"foto36.jpg",logo:"logo36.png",votos:0}
+{nombre:"Carlos Álvarez",foto:"https://upload.wikimedia.org/wikipedia/commons/5/5f/Carlos_Alvarez.jpg",logo:"https://via.placeholder.com/40",votos:0}
 
 ];
 
-let contenedor=document.getElementById("candidatos");
+for(let i=4;i<=36;i++){
+
+candidatos.push({
+nombre:"Candidato "+i,
+foto:"https://via.placeholder.com/120",
+logo:"https://via.placeholder.com/40",
+votos:0
+})
+
+}
+
+let cont=document.getElementById("contenedor");
 
 candidatos.forEach((c,i)=>{
 
-contenedor.innerHTML+=`
+cont.innerHTML+=`
 
 <div class="card">
 
 <img src="${c.foto}">
+
 <h3>${c.nombre}</h3>
+
 <img class="logo" src="${c.logo}">
 
 <br>
@@ -194,24 +148,24 @@ contenedor.innerHTML+=`
 function votar(i){
 
 candidatos[i].votos++;
+total++;
 
 document.getElementById("v"+i).innerText=candidatos[i].votos;
+document.getElementById("total").innerText="Total votos: "+total;
 
 }
 
-function mostrarResultados(){
-
-let total=candidatos.reduce((a,b)=>a+b.votos,0);
+function resultados(){
 
 let ranking=[...candidatos].sort((a,b)=>b.votos-a.votos);
 
-let html="<h2>Ranking</h2>";
+let html="<h2>Ranking electoral</h2>";
 
 ranking.forEach((c,i)=>{
 
-let porcentaje= total? ((c.votos/total)*100).toFixed(1):0;
+let p= total? ((c.votos/total)*100).toFixed(1):0;
 
-html+=`${i+1}° ${c.nombre} - ${c.votos} votos (${porcentaje}%)<br>`;
+html+=`${i+1}° ${c.nombre} - ${c.votos} votos (${p}%)<br>`;
 
 });
 
