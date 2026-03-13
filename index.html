@@ -7,20 +7,24 @@
 <style>
 
 body{
-font-family:Arial;
-background:#f0f0f0;
-text-align:center;
+font-family: Arial;
+margin:0;
+background:#f2f2f2;
 }
 
-h1{
-background:#d40000;
+header{
+background:#d60000;
 color:white;
+text-align:center;
 padding:15px;
+font-size:28px;
+font-weight:bold;
 }
 
 #total{
+text-align:center;
+margin:15px;
 font-size:20px;
-margin:10px;
 }
 
 .grid{
@@ -32,14 +36,15 @@ padding:20px;
 
 .card{
 background:white;
-padding:20px;
 border-radius:10px;
-box-shadow:0 0 10px rgba(0,0,0,0.2);
+padding:15px;
+text-align:center;
+box-shadow:0 3px 10px rgba(0,0,0,0.15);
 }
 
-.card img{
-width:110px;
-height:110px;
+.foto{
+width:120px;
+height:120px;
 border-radius:50%;
 object-fit:cover;
 }
@@ -50,128 +55,120 @@ margin-top:5px;
 }
 
 button{
-padding:8px 15px;
 margin:5px;
+padding:8px 12px;
 border:none;
 border-radius:5px;
 cursor:pointer;
+font-weight:bold;
 }
 
 .votar{
-background:#0a8f2d;
+background:green;
 color:white;
 }
 
 .no{
-background:#c70000;
+background:red;
 color:white;
 }
 
-#ranking{
-margin:40px;
-font-size:18px;
-background:white;
-padding:20px;
-border-radius:10px;
+.votos{
+margin-top:8px;
+font-weight:bold;
 }
 
 </style>
-
 </head>
 
 <body>
 
-<h1>Simulación Electoral Perú 2026</h1>
+<header>Simulación Electoral Perú 2026</header>
 
 <div id="total">Total votos: 0</div>
 
-<div class="grid" id="contenedor"></div>
-
-<br>
-
-<button onclick="resultados()">VER RESULTADOS</button>
-
-<div id="ranking"></div>
+<div class="grid" id="candidatos"></div>
 
 <script>
 
 let total=0;
 
-let candidatos=[
+const candidatos=[
 
-{nombre:"Keiko Fujimori",foto:"https://upload.wikimedia.org/wikipedia/commons/9/99/Keiko_Fujimori.jpg",logo:"https://upload.wikimedia.org/wikipedia/commons/2/2b/Fuerza_Popular_logo.png",votos:0},
-
-{nombre:"Rafael López Aliaga",foto:"https://upload.wikimedia.org/wikipedia/commons/e/e2/Rafael_Lopez_Aliaga.jpg",logo:"https://upload.wikimedia.org/wikipedia/commons/3/39/Renovacion_Popular_logo.png",votos:0},
-
-{nombre:"Carlos Álvarez",foto:"https://upload.wikimedia.org/wikipedia/commons/5/5f/Carlos_Alvarez.jpg",logo:"https://via.placeholder.com/40",votos:0}
+{nombre:"José Daniel Williams Zapata",foto:"img/williams.jpg",logo:"img/avanza.png"},
+{nombre:"Keiko Sofía Fujimori Higuchi",foto:"img/keiko.jpg",logo:"img/fuerza.png"},
+{nombre:"César Acuña Peralta",foto:"img/acuna.jpg",logo:"img/app.png"},
+{nombre:"Jorge Nieto Montesinos",foto:"img/nieto.jpg",logo:"img/buen.png"},
+{nombre:"Rafael López Aliaga",foto:"img/lopez.jpg",logo:"img/rp.png"},
+{nombre:"Rosario del Pilar Fernández",foto:"img/rosario.jpg",logo:"img/union.png"},
+{nombre:"Álex Gonzales Castillo",foto:"img/gonzales.jpg",logo:"img/democrata.png"},
+{nombre:"Herbert Caller Gutiérrez",foto:"img/caller.jpg",logo:"img/patriotico.png"},
+{nombre:"Roberto Enrique Chiabra León",foto:"img/chiabra.jpg",logo:"img/unidad.png"},
+{nombre:"Pablo Alfonso López Chau",foto:"img/chau.jpg",logo:"img/ahora.png"},
+{nombre:"José León Luna Gálvez",foto:"img/luna.jpg",logo:"img/podemos.png"},
+{nombre:"Rafael Jorge Belaunde Llosa",foto:"img/belaunde.jpg",logo:"img/libertad.png"},
+{nombre:"Alfonso Carlos Espá Garcés",foto:"img/espa.jpg",logo:"img/sinte.png"},
+{nombre:"Roberto Helbert Sánchez Palomino",foto:"img/sanchez.jpg",logo:"img/juntos.png"},
+{nombre:"Antonio Ortiz Villano",foto:"img/ortiz.jpg",logo:"img/evp.png"},
+{nombre:"Ronald Darwin Atencio Sotomayor",foto:"img/atencio.jpg",logo:"img/venceremos.png"},
+{nombre:"Carlos Gonzalo Álvarez Loayza",foto:"img/alvarez.jpg",logo:"img/pais.png"},
+{nombre:"Francisco Ernesto Diez-Canseco Távara",foto:"img/diez.jpg",logo:"img/accion.png"},
+{nombre:"Wolfgang Mario Grozo Costa",foto:"img/grozo.jpg",logo:"img/integridad.png"},
+{nombre:"Ricardo Pablo Belmont Cassinelli",foto:"img/belmont.jpg",logo:"img/civico.png"},
+{nombre:"Carlos Ernesto Jaico Carranza",foto:"img/jaico.jpg",logo:"img/perumoderno.png"},
+{nombre:"Pitter Enrique Valderrama Peña",foto:"img/pitter.jpg",logo:"img/apra.png"},
+{nombre:"Yonhy Lescano Ancieta",foto:"img/lescano.jpg",logo:"img/cooperacion.png"},
+{nombre:"Armando Joaquín Massé Fernández",foto:"img/masse.jpg",logo:"img/democratafederal.png"},
+{nombre:"George Patrick Forsyth Sommer",foto:"img/forsyth.jpg",logo:"img/somos.png"},
+{nombre:"Luis Fernando Olivera Vega",foto:"img/olivera.jpg",logo:"img/esperanza.png"},
+{nombre:"Charlie Carrasco Salazar",foto:"img/carrasco.jpg",logo:"img/unido.png"},
+{nombre:"Fiorella Giannina Molinelli Aristondo",foto:"img/molinelli.jpg",logo:"img/libertad2.png"},
+{nombre:"Vladimir Roy Cerrón Rojas",foto:"img/cerron.jpg",logo:"img/nacional.png"},
+{nombre:"Mario Enrique Vizcarra Cornejo",foto:"img/vizcarra.jpg",logo:"img/peruprimero.png"},
+{nombre:"Paul Davis Jaimes Blanco",foto:"img/jaimes.jpg",logo:"img/progresamos.png"},
+{nombre:"Mesías Antonio Guevara Amasifuén",foto:"img/guevara.jpg",logo:"img/morado.png"},
+{nombre:"Walter Gilmer Chirinos Purizaga",foto:"img/chirinos.jpg",logo:"img/partido.png"},
+{nombre:"Napoleón Becerra García",foto:"img/becerra.jpg",logo:"img/trabajadores.png"},
+{nombre:"Álvaro Gonzalo Paz de la Barra Freigeiro",foto:"img/paz.jpg",logo:"img/fiel.png"},
+{nombre:"María Soledad Pérez Tello",foto:"img/tello.jpg",logo:"img/cristiano.png"}
 
 ];
 
-for(let i=4;i<=36;i++){
+const contenedor=document.getElementById("candidatos");
 
-candidatos.push({
-nombre:"Candidato "+i,
-foto:"https://via.placeholder.com/120",
-logo:"https://via.placeholder.com/40",
-votos:0
-})
+candidatos.forEach((candidato,i)=>{
 
-}
+let card=document.createElement("div");
+card.className="card";
 
-let cont=document.getElementById("contenedor");
+let votos=0;
 
-candidatos.forEach((c,i)=>{
-
-cont.innerHTML+=`
-
-<div class="card">
-
-<img src="${c.foto}">
-
-<h3>${c.nombre}</h3>
-
-<img class="logo" src="${c.logo}">
+card.innerHTML=`
+<img src="${candidato.foto}" class="foto">
+<h3>${candidato.nombre}</h3>
+<img src="${candidato.logo}" class="logo">
 
 <br>
 
-<button class="votar" onclick="votar(${i})">VOTAR</button>
+<button class="votar">VOTAR</button>
 <button class="no">NO VOTAR</button>
 
-<p>Votos: <span id="v${i}">0</span></p>
-
-</div>
-
+<div class="votos">Votos: <span>0</span></div>
 `;
 
-});
+let votarBtn=card.querySelector(".votar");
+let votoTexto=card.querySelector("span");
 
-function votar(i){
-
-candidatos[i].votos++;
+votarBtn.onclick=()=>{
+votos++;
 total++;
-
-document.getElementById("v"+i).innerText=candidatos[i].votos;
+votoTexto.innerText=votos;
 document.getElementById("total").innerText="Total votos: "+total;
+};
 
-}
-
-function resultados(){
-
-let ranking=[...candidatos].sort((a,b)=>b.votos-a.votos);
-
-let html="<h2>Ranking electoral</h2>";
-
-ranking.forEach((c,i)=>{
-
-let p= total? ((c.votos/total)*100).toFixed(1):0;
-
-html+=`${i+1}° ${c.nombre} - ${c.votos} votos (${p}%)<br>`;
+contenedor.appendChild(card);
 
 });
-
-document.getElementById("ranking").innerHTML=html;
-
-}
 
 </script>
 
