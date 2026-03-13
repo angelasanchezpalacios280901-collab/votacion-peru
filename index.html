@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Votacion Peru 2026</title>
+<title>Votación Perú 2026</title>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
@@ -18,8 +18,14 @@ header{
 background:#d60000;
 color:white;
 padding:15px;
-font-size:26px;
+font-size:28px;
 font-weight:bold;
+}
+
+select{
+padding:10px;
+margin:10px;
+font-size:16px;
 }
 
 .container{
@@ -55,7 +61,7 @@ border-radius:5px;
 cursor:pointer;
 }
 
-.votar{
+.si{
 background:#28a745;
 color:white;
 }
@@ -65,12 +71,10 @@ background:#dc3545;
 color:white;
 }
 
-.barra{
-height:10px;
-background:#28a745;
-margin-top:6px;
-border-radius:5px;
-width:0%;
+.ranking{
+font-size:20px;
+margin:10px;
+font-weight:bold;
 }
 
 </style>
@@ -80,31 +84,96 @@ width:0%;
 <body>
 
 <header>
-PERU REGISTRO DE VOTOS
+PERÚ REGISTRO DE VOTOS
 </header>
 
-<h3>Elige tu candidato</h3>
+<h3>Selecciona tu departamento</h3>
+
+<select>
+
+<option>Lima</option>
+<option>Callao</option>
+<option>Amazonas</option>
+<option>Ancash</option>
+<option>Apurimac</option>
+<option>Arequipa</option>
+<option>Ayacucho</option>
+<option>Cajamarca</option>
+<option>Cusco</option>
+<option>Huancavelica</option>
+<option>Huanuco</option>
+<option>Ica</option>
+<option>Junin</option>
+<option>La Libertad</option>
+<option>Lambayeque</option>
+<option>Loreto</option>
+<option>Madre de Dios</option>
+<option>Moquegua</option>
+<option>Pasco</option>
+<option>Piura</option>
+<option>Puno</option>
+<option>San Martin</option>
+<option>Tacna</option>
+<option>Tumbes</option>
+<option>Ucayali</option>
+
+</select>
+
+<h2>Candidatos</h2>
 
 <div class="container" id="candidatos"></div>
 
+<div class="ranking" id="ranking"></div>
+
 <h2>Resultados</h2>
 
-<canvas id="grafica" width="400" height="200"></canvas>
+<canvas id="grafica"></canvas>
 
 <script>
 
 let candidatos=[
 
-{nombre:"Keiko Fujimori",foto:"https://via.placeholder.com/200",logo:"https://via.placeholder.com/60"},
-{nombre:"Cesar Acuna",foto:"https://via.placeholder.com/200",logo:"https://via.placeholder.com/60"},
-{nombre:"Rafael Lopez Aliaga",foto:"https://via.placeholder.com/200",logo:"https://via.placeholder.com/60"},
-{nombre:"George Forsyth",foto:"https://via.placeholder.com/200",logo:"https://via.placeholder.com/60"},
-{nombre:"Carlos Alvarez",foto:"https://via.placeholder.com/200",logo:"https://via.placeholder.com/60"},
-{nombre:"Vladimir Cerron",foto:"https://via.placeholder.com/200",logo:"https://via.placeholder.com/60"}
+"Keiko Fujimori",
+"Cesar Acuna",
+"Jorge Nieto Montesinos",
+"Rosario Fernandez",
+"Herbert Caller",
+"Alfonso Lopez Chau",
+"Jose Luna Galvez",
+"Roberto Sanchez",
+"Carlos Jaico",
+"Fernando Olivera",
+"Charlie Carrasco",
+"Marisol Perez Tello",
+"Paul Jaimes",
+"Mesias Guevara",
+"Alvaro Paz de la Barra",
+"George Forsyth",
+"Carlos Alvarez",
+"Francisco Diez Canseco",
+"Wolfgang Grozo",
+"Ricardo Belmont",
+"Napoleon Becerra",
+"Ronald Atencio",
+"Yonhy Lescano",
+"Mario Vizcarra",
+"Joaquin Masse Fernandez",
+"Enrique Valderrama",
+"Alex Gonzales Castillo",
+"Roberto Chiabra",
+"Rafael Belaunde",
+"Carlos Espa",
+"Antonio Ortiz Villano",
+"Fiorella Molinelli",
+"Vladimir Cerron",
+"Walter Chirinos",
+"Rafael Lopez Aliaga",
+"Jose Williams"
 
 ]
 
-let votos=new Array(candidatos.length).fill(0)
+let votosSi=new Array(candidatos.length).fill(0)
+let votosNo=new Array(candidatos.length).fill(0)
 
 let cont=document.getElementById("candidatos")
 
@@ -114,19 +183,17 @@ cont.innerHTML+=`
 
 <div class="card">
 
-<img src="${c.foto}">
+<img src="https://via.placeholder.com/200">
 
-<h3>${c.nombre}</h3>
+<h3>${c}</h3>
 
-<img class="logo" src="${c.logo}">
+<img class="logo" src="https://via.placeholder.com/60">
 
-<p id="v${i}">0 votos</p>
+<p>SI: <span id="si${i}">0</span></p>
+<p>NO: <span id="no${i}">0</span></p>
 
-<button class="votar" onclick="votar(${i})">VOTAR</button>
-
-<button class="no">NO VOTAR</button>
-
-<div class="barra" id="b${i}"></div>
+<button class="si" onclick="votarSi(${i})">VOTAR</button>
+<button class="no" onclick="votarNo(${i})">NO VOTAR</button>
 
 </div>
 
@@ -134,11 +201,19 @@ cont.innerHTML+=`
 
 })
 
-function votar(i){
+function votarSi(i){
 
-votos[i]++
+votosSi[i]++
+document.getElementById("si"+i).innerText=votosSi[i]
 
-document.getElementById("v"+i).innerText=votos[i]+" votos"
+actualizar()
+
+}
+
+function votarNo(i){
+
+votosNo[i]++
+document.getElementById("no"+i).innerText=votosNo[i]
 
 actualizar()
 
@@ -146,18 +221,24 @@ actualizar()
 
 function actualizar(){
 
-let total=votos.reduce((a,b)=>a+b,0)
-
-votos.forEach((v,i)=>{
-
-let p= total ? (v/total)*100 : 0
-
-document.getElementById("b"+i).style.width=p+"%"
-
-})
-
-grafica.data.datasets[0].data=votos
+grafica.data.datasets[0].data=votosSi
 grafica.update()
+
+ranking()
+
+}
+
+function ranking(){
+
+let datos=candidatos.map((c,i)=>({nombre:c,votos:votosSi[i]}))
+
+datos.sort((a,b)=>b.votos-a.votos)
+
+document.getElementById("ranking").innerHTML=
+
+"🥇 "+datos[0].nombre+
+"<br>🥈 "+datos[1].nombre+
+"<br>🥉 "+datos[2].nombre
 
 }
 
@@ -169,19 +250,17 @@ type:"bar",
 
 data:{
 
-labels:candidatos.map(c=>c.nombre),
+labels:candidatos,
 
 datasets:[{
 
-label:"Votos",
+label:"Votos SI",
 
-data:votos
+data:votosSi
 
 }]
 
-},
-
-options:{responsive:true}
+}
 
 })
 
