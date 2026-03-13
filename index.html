@@ -1,9 +1,10 @@
 <!DOCTYPE html>
-<!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <title>Votacion Peru 2026</title>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <style>
 
@@ -14,16 +15,11 @@ text-align:center;
 }
 
 header{
-background:#c40000;
+background:#d60000;
 color:white;
 padding:15px;
 font-size:26px;
 font-weight:bold;
-}
-
-.total{
-font-size:20px;
-margin:10px;
 }
 
 .container{
@@ -46,20 +42,33 @@ width:100%;
 border-radius:8px;
 }
 
+.logo{
+width:60px;
+margin-top:5px;
+}
+
 button{
-background:#c40000;
-color:white;
+padding:8px 12px;
+margin:4px;
 border:none;
-padding:8px 15px;
 border-radius:5px;
 cursor:pointer;
-margin-top:5px;
+}
+
+.votar{
+background:#28a745;
+color:white;
+}
+
+.no{
+background:#dc3545;
+color:white;
 }
 
 .barra{
 height:10px;
-background:#c40000;
-margin-top:5px;
+background:#28a745;
+margin-top:6px;
 border-radius:5px;
 width:0%;
 }
@@ -74,60 +83,28 @@ width:0%;
 PERU REGISTRO DE VOTOS
 </header>
 
-<div class="total">
-VOTOS TOTALES: <span id="total">0</span>
-</div>
-
 <h3>Elige tu candidato</h3>
 
 <div class="container" id="candidatos"></div>
+
+<h2>Resultados</h2>
+
+<canvas id="grafica" width="400" height="200"></canvas>
 
 <script>
 
 let candidatos=[
 
-"Keiko Fujimori",
-"Cesar Acuna",
-"Jorge Nieto",
-"Rosario Fernandez",
-"Herbert Caller",
-"Alfonso Lopez Chau",
-"Jose Luna Galvez",
-"Roberto Sanchez",
-"Carlos Jaico",
-"Fernando Olivera",
-"Charlie Carrasco",
-"Marisol Perez Tello",
-"Paul Jaimes",
-"Mesias Guevara",
-"Alvaro Paz de la Barra",
-"George Forsyth",
-"Carlos Alvarez",
-"Francisco Diez Canseco",
-"Wolfgang Grozo",
-"Ricardo Belmont",
-"Napoleon Becerra",
-"Ronald Atencio",
-"Yonhy Lescano",
-"Mario Vizcarra",
-"Joaquin Masse",
-"Enrique Valderrama",
-"Alex Gonzales",
-"Roberto Chiabra",
-"Rafael Belaunde",
-"Carlos Espa",
-"Antonio Ortiz",
-"Fiorella Molinelli",
-"Vladimir Cerron",
-"Walter Chirinos",
-"Rafael Lopez Aliaga",
-"Jose Williams"
+{nombre:"Keiko Fujimori",foto:"https://via.placeholder.com/200",logo:"https://via.placeholder.com/60"},
+{nombre:"Cesar Acuna",foto:"https://via.placeholder.com/200",logo:"https://via.placeholder.com/60"},
+{nombre:"Rafael Lopez Aliaga",foto:"https://via.placeholder.com/200",logo:"https://via.placeholder.com/60"},
+{nombre:"George Forsyth",foto:"https://via.placeholder.com/200",logo:"https://via.placeholder.com/60"},
+{nombre:"Carlos Alvarez",foto:"https://via.placeholder.com/200",logo:"https://via.placeholder.com/60"},
+{nombre:"Vladimir Cerron",foto:"https://via.placeholder.com/200",logo:"https://via.placeholder.com/60"}
 
 ]
 
 let votos=new Array(candidatos.length).fill(0)
-
-let total=0
 
 let cont=document.getElementById("candidatos")
 
@@ -137,13 +114,17 @@ cont.innerHTML+=`
 
 <div class="card">
 
-<img src="https://via.placeholder.com/200x150">
+<img src="${c.foto}">
 
-<h3>${c}</h3>
+<h3>${c.nombre}</h3>
+
+<img class="logo" src="${c.logo}">
 
 <p id="v${i}">0 votos</p>
 
-<button onclick="votar(${i})">VOTAR</button>
+<button class="votar" onclick="votar(${i})">VOTAR</button>
+
+<button class="no">NO VOTAR</button>
 
 <div class="barra" id="b${i}"></div>
 
@@ -157,11 +138,7 @@ function votar(i){
 
 votos[i]++
 
-total++
-
 document.getElementById("v"+i).innerText=votos[i]+" votos"
-
-document.getElementById("total").innerText=total
 
 actualizar()
 
@@ -169,17 +146,44 @@ actualizar()
 
 function actualizar(){
 
-let suma=votos.reduce((a,b)=>a+b,0)
+let total=votos.reduce((a,b)=>a+b,0)
 
 votos.forEach((v,i)=>{
 
-let p=suma ? (v/suma)*100 : 0
+let p= total ? (v/total)*100 : 0
 
 document.getElementById("b"+i).style.width=p+"%"
 
 })
 
+grafica.data.datasets[0].data=votos
+grafica.update()
+
 }
+
+let ctx=document.getElementById("grafica")
+
+let grafica=new Chart(ctx,{
+
+type:"bar",
+
+data:{
+
+labels:candidatos.map(c=>c.nombre),
+
+datasets:[{
+
+label:"Votos",
+
+data:votos
+
+}]
+
+},
+
+options:{responsive:true}
+
+})
 
 </script>
 
