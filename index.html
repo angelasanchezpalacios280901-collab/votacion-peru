@@ -7,7 +7,7 @@
 <style>
 
 body{
-font-family: Arial;
+font-family:Arial;
 margin:0;
 background:#f2f2f2;
 }
@@ -21,10 +21,20 @@ font-size:28px;
 font-weight:bold;
 }
 
-#total{
+.controles{
 text-align:center;
 margin:15px;
+}
+
+select{
+padding:8px;
+font-size:16px;
+}
+
+#total{
+text-align:center;
 font-size:20px;
+margin-bottom:10px;
 }
 
 .grid{
@@ -43,8 +53,8 @@ box-shadow:0 3px 10px rgba(0,0,0,0.15);
 }
 
 .foto{
-width:120px;
-height:120px;
+width:110px;
+height:110px;
 border-radius:50%;
 object-fit:cover;
 }
@@ -85,6 +95,40 @@ font-weight:bold;
 
 <header>Simulación Electoral Perú 2026</header>
 
+<div class="controles">
+
+<label>Selecciona el departamento:</label>
+
+<select>
+<option>Lima</option>
+<option>Callao</option>
+<option>Amazonas</option>
+<option>Áncash</option>
+<option>Apurímac</option>
+<option>Arequipa</option>
+<option>Ayacucho</option>
+<option>Cajamarca</option>
+<option>Cusco</option>
+<option>Huancavelica</option>
+<option>Huánuco</option>
+<option>Ica</option>
+<option>Junín</option>
+<option>La Libertad</option>
+<option>Lambayeque</option>
+<option>Loreto</option>
+<option>Madre de Dios</option>
+<option>Moquegua</option>
+<option>Pasco</option>
+<option>Piura</option>
+<option>Puno</option>
+<option>San Martín</option>
+<option>Tacna</option>
+<option>Tumbes</option>
+<option>Ucayali</option>
+</select>
+
+</div>
+
 <div id="total">Total votos: 0</div>
 
 <div class="grid" id="candidatos"></div>
@@ -95,58 +139,61 @@ let total=0;
 
 const candidatos=[
 
-{nombre:"José Daniel Williams Zapata",foto:"img/williams.jpg",logo:"img/avanza.png"},
-{nombre:"Keiko Sofía Fujimori Higuchi",foto:"img/keiko.jpg",logo:"img/fuerza.png"},
-{nombre:"César Acuña Peralta",foto:"img/acuna.jpg",logo:"img/app.png"},
-{nombre:"Jorge Nieto Montesinos",foto:"img/nieto.jpg",logo:"img/buen.png"},
-{nombre:"Rafael López Aliaga",foto:"img/lopez.jpg",logo:"img/rp.png"},
-{nombre:"Rosario del Pilar Fernández",foto:"img/rosario.jpg",logo:"img/union.png"},
-{nombre:"Álex Gonzales Castillo",foto:"img/gonzales.jpg",logo:"img/democrata.png"},
-{nombre:"Herbert Caller Gutiérrez",foto:"img/caller.jpg",logo:"img/patriotico.png"},
-{nombre:"Roberto Enrique Chiabra León",foto:"img/chiabra.jpg",logo:"img/unidad.png"},
-{nombre:"Pablo Alfonso López Chau",foto:"img/chau.jpg",logo:"img/ahora.png"},
-{nombre:"José León Luna Gálvez",foto:"img/luna.jpg",logo:"img/podemos.png"},
-{nombre:"Rafael Jorge Belaunde Llosa",foto:"img/belaunde.jpg",logo:"img/libertad.png"},
-{nombre:"Alfonso Carlos Espá Garcés",foto:"img/espa.jpg",logo:"img/sinte.png"},
-{nombre:"Roberto Helbert Sánchez Palomino",foto:"img/sanchez.jpg",logo:"img/juntos.png"},
-{nombre:"Antonio Ortiz Villano",foto:"img/ortiz.jpg",logo:"img/evp.png"},
-{nombre:"Ronald Darwin Atencio Sotomayor",foto:"img/atencio.jpg",logo:"img/venceremos.png"},
-{nombre:"Carlos Gonzalo Álvarez Loayza",foto:"img/alvarez.jpg",logo:"img/pais.png"},
-{nombre:"Francisco Ernesto Diez-Canseco Távara",foto:"img/diez.jpg",logo:"img/accion.png"},
-{nombre:"Wolfgang Mario Grozo Costa",foto:"img/grozo.jpg",logo:"img/integridad.png"},
-{nombre:"Ricardo Pablo Belmont Cassinelli",foto:"img/belmont.jpg",logo:"img/civico.png"},
-{nombre:"Carlos Ernesto Jaico Carranza",foto:"img/jaico.jpg",logo:"img/perumoderno.png"},
-{nombre:"Pitter Enrique Valderrama Peña",foto:"img/pitter.jpg",logo:"img/apra.png"},
-{nombre:"Yonhy Lescano Ancieta",foto:"img/lescano.jpg",logo:"img/cooperacion.png"},
-{nombre:"Armando Joaquín Massé Fernández",foto:"img/masse.jpg",logo:"img/democratafederal.png"},
-{nombre:"George Patrick Forsyth Sommer",foto:"img/forsyth.jpg",logo:"img/somos.png"},
-{nombre:"Luis Fernando Olivera Vega",foto:"img/olivera.jpg",logo:"img/esperanza.png"},
-{nombre:"Charlie Carrasco Salazar",foto:"img/carrasco.jpg",logo:"img/unido.png"},
-{nombre:"Fiorella Giannina Molinelli Aristondo",foto:"img/molinelli.jpg",logo:"img/libertad2.png"},
-{nombre:"Vladimir Roy Cerrón Rojas",foto:"img/cerron.jpg",logo:"img/nacional.png"},
-{nombre:"Mario Enrique Vizcarra Cornejo",foto:"img/vizcarra.jpg",logo:"img/peruprimero.png"},
-{nombre:"Paul Davis Jaimes Blanco",foto:"img/jaimes.jpg",logo:"img/progresamos.png"},
-{nombre:"Mesías Antonio Guevara Amasifuén",foto:"img/guevara.jpg",logo:"img/morado.png"},
-{nombre:"Walter Gilmer Chirinos Purizaga",foto:"img/chirinos.jpg",logo:"img/partido.png"},
-{nombre:"Napoleón Becerra García",foto:"img/becerra.jpg",logo:"img/trabajadores.png"},
-{nombre:"Álvaro Gonzalo Paz de la Barra Freigeiro",foto:"img/paz.jpg",logo:"img/fiel.png"},
-{nombre:"María Soledad Pérez Tello",foto:"img/tello.jpg",logo:"img/cristiano.png"}
+"José Daniel Williams Zapata",
+"Keiko Sofía Fujimori Higuchi",
+"César Acuña Peralta",
+"Jorge Nieto Montesinos",
+"Rafael López Aliaga",
+"Rosario del Pilar Fernández",
+"Álex Gonzales Castillo",
+"Herbert Caller Gutiérrez",
+"Roberto Enrique Chiabra León",
+"Pablo Alfonso López Chau",
+"José León Luna Gálvez",
+"Rafael Jorge Belaunde Llosa",
+"Alfonso Carlos Espá Garcés",
+"Roberto Helbert Sánchez Palomino",
+"Antonio Ortiz Villano",
+"Ronald Darwin Atencio Sotomayor",
+"Carlos Gonzalo Álvarez Loayza",
+"Francisco Ernesto Diez-Canseco Távara",
+"Wolfgang Mario Grozo Costa",
+"Ricardo Pablo Belmont Cassinelli",
+"Carlos Ernesto Jaico Carranza",
+"Pitter Enrique Valderrama Peña",
+"Yonhy Lescano Ancieta",
+"Armando Joaquín Massé Fernández",
+"George Patrick Forsyth Sommer",
+"Luis Fernando Olivera Vega",
+"Charlie Carrasco Salazar",
+"Fiorella Giannina Molinelli Aristondo",
+"Vladimir Roy Cerrón Rojas",
+"Mario Enrique Vizcarra Cornejo",
+"Paul Davis Jaimes Blanco",
+"Mesías Antonio Guevara Amasifuén",
+"Walter Gilmer Chirinos Purizaga",
+"Napoleón Becerra García",
+"Álvaro Gonzalo Paz de la Barra Freigeiro",
+"María Soledad Pérez Tello"
 
 ];
 
 const contenedor=document.getElementById("candidatos");
 
-candidatos.forEach((candidato,i)=>{
+candidatos.forEach((nombre,i)=>{
+
+let votos=0;
 
 let card=document.createElement("div");
 card.className="card";
 
-let votos=0;
-
 card.innerHTML=`
-<img src="${candidato.foto}" class="foto">
-<h3>${candidato.nombre}</h3>
-<img src="${candidato.logo}" class="logo">
+
+<img src="img/candidato${i+1}.jpg" class="foto">
+
+<h3>${nombre}</h3>
+
+<img src="img/logo${i+1}.png" class="logo">
 
 <br>
 
@@ -154,15 +201,16 @@ card.innerHTML=`
 <button class="no">NO VOTAR</button>
 
 <div class="votos">Votos: <span>0</span></div>
+
 `;
 
 let votarBtn=card.querySelector(".votar");
-let votoTexto=card.querySelector("span");
+let texto=card.querySelector("span");
 
 votarBtn.onclick=()=>{
 votos++;
 total++;
-votoTexto.innerText=votos;
+texto.innerText=votos;
 document.getElementById("total").innerText="Total votos: "+total;
 };
 
