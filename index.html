@@ -88,6 +88,18 @@ margin-top:8px;
 font-weight:bold;
 }
 
+#ranking{
+background:white;
+margin:30px;
+padding:20px;
+border-radius:10px;
+box-shadow:0 3px 10px rgba(0,0,0,0.15);
+}
+
+#ranking h2{
+text-align:center;
+}
+
 </style>
 </head>
 
@@ -97,17 +109,17 @@ font-weight:bold;
 
 <div class="controles">
 
-<label>Selecciona el departamento:</label>
+<label>Selecciona tu departamento:</label>
 
-<select>
-<option>Lima</option>
-<option>Callao</option>
+<select id="departamento">
+
 <option>Amazonas</option>
 <option>Áncash</option>
 <option>Apurímac</option>
 <option>Arequipa</option>
 <option>Ayacucho</option>
 <option>Cajamarca</option>
+<option>Callao</option>
 <option>Cusco</option>
 <option>Huancavelica</option>
 <option>Huánuco</option>
@@ -115,6 +127,7 @@ font-weight:bold;
 <option>Junín</option>
 <option>La Libertad</option>
 <option>Lambayeque</option>
+<option>Lima</option>
 <option>Loreto</option>
 <option>Madre de Dios</option>
 <option>Moquegua</option>
@@ -125,6 +138,7 @@ font-weight:bold;
 <option>Tacna</option>
 <option>Tumbes</option>
 <option>Ucayali</option>
+
 </select>
 
 </div>
@@ -132,6 +146,14 @@ font-weight:bold;
 <div id="total">Total votos: 0</div>
 
 <div class="grid" id="candidatos"></div>
+
+<div id="ranking">
+
+<h2>Ranking de candidatos</h2>
+
+<ol id="listaRanking"></ol>
+
+</div>
 
 <script>
 
@@ -178,11 +200,13 @@ const candidatos=[
 
 ];
 
+let datos=[];
+
 const contenedor=document.getElementById("candidatos");
 
 candidatos.forEach((nombre,i)=>{
 
-let votos=0;
+datos.push({nombre:nombre,votos:0});
 
 let card=document.createElement("div");
 card.className="card";
@@ -208,15 +232,41 @@ let votarBtn=card.querySelector(".votar");
 let texto=card.querySelector("span");
 
 votarBtn.onclick=()=>{
-votos++;
+
+datos[i].votos++;
 total++;
-texto.innerText=votos;
+
+texto.innerText=datos[i].votos;
+
 document.getElementById("total").innerText="Total votos: "+total;
+
+actualizarRanking();
+
 };
 
 contenedor.appendChild(card);
 
 });
+
+function actualizarRanking(){
+
+let orden=[...datos].sort((a,b)=>b.votos-a.votos);
+
+let lista=document.getElementById("listaRanking");
+
+lista.innerHTML="";
+
+orden.forEach(c=>{
+
+let li=document.createElement("li");
+
+li.innerText=c.nombre+" - "+c.votos+" votos";
+
+lista.appendChild(li);
+
+});
+
+}
 
 </script>
 
