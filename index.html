@@ -78,7 +78,7 @@ background:green;
 color:white;
 }
 
-.no{
+.novotar{
 background:red;
 color:white;
 }
@@ -108,7 +108,6 @@ box-shadow:0 3px 10px rgba(0,0,0,0.15);
 <label>Selecciona tu departamento:</label>
 
 <select>
-
 <option>Amazonas</option>
 <option>Áncash</option>
 <option>Apurímac</option>
@@ -134,7 +133,6 @@ box-shadow:0 3px 10px rgba(0,0,0,0.15);
 <option>Tacna</option>
 <option>Tumbes</option>
 <option>Ucayali</option>
-
 </select>
 
 </div>
@@ -216,22 +214,20 @@ card.innerHTML=`
 <br>
 
 <button class="votar">VOTAR</button>
-<button class="no">NO VOTAR</button>
+<button class="novotar">NO VOTAR</button>
 
 <div class="votos">
-
 Sí: <span class="si">0</span> |
-No: <span class="noV">0</span>
-
+No: <span class="no">0</span>
 </div>
 
 `;
 
 let btnSi=card.querySelector(".votar");
-let btnNo=card.querySelector(".no");
+let btnNo=card.querySelector(".novotar");
 
 let textoSi=card.querySelector(".si");
-let textoNo=card.querySelector(".noV");
+let textoNo=card.querySelector(".no");
 
 btnSi.onclick=()=>{
 
