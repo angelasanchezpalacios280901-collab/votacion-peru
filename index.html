@@ -1,272 +1,51 @@
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>Votación Perú 2026</title>
-
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-<style>
-
-body{
-font-family:Arial;
-background:#f2f2f2;
-text-align:center;
-}
-
-header{
-background:#d60000;
-color:white;
-padding:15px;
-font-size:28px;
-font-weight:bold;
-}
-
-select{
-padding:10px;
-margin:10px;
-font-size:16px;
-}
-
-.container{
-display:flex;
-flex-wrap:wrap;
-justify-content:center;
-}
-
-.card{
-background:white;
-border-radius:10px;
-box-shadow:0 2px 6px rgba(0,0,0,0.2);
-width:220px;
-margin:12px;
-padding:12px;
-}
-
-.foto{
-width:100%;
-height:200px;
-object-fit:cover;
-border-radius:8px;
-}
-
-.logo{
-width:60px;
-margin-top:5px;
-}
-
-button{
-padding:8px 12px;
-margin:4px;
-border:none;
-border-radius:5px;
-cursor:pointer;
-}
-
-.si{
-background:#28a745;
-color:white;
-}
-
-.no{
-background:#dc3545;
-color:white;
-}
-
-.ranking{
-font-size:20px;
-margin:10px;
-font-weight:bold;
-}
-
-</style>
-
-</head>
-
-<body>
-
-<header>
-PERÚ REGISTRO DE VOTOS
-</header>
-
-<h3>Selecciona tu departamento</h3>
-
-<select>
-
-<option>Lima</option>
-<option>Callao</option>
-<option>Amazonas</option>
-<option>Ancash</option>
-<option>Apurimac</option>
-<option>Arequipa</option>
-<option>Ayacucho</option>
-<option>Cajamarca</option>
-<option>Cusco</option>
-<option>Huancavelica</option>
-<option>Huanuco</option>
-<option>Ica</option>
-<option>Junin</option>
-<option>La Libertad</option>
-<option>Lambayeque</option>
-<option>Loreto</option>
-<option>Madre de Dios</option>
-<option>Moquegua</option>
-<option>Pasco</option>
-<option>Piura</option>
-<option>Puno</option>
-<option>San Martin</option>
-<option>Tacna</option>
-<option>Tumbes</option>
-<option>Ucayali</option>
-
-</select>
-
-<h2>Candidatos</h2>
-
-<div class="container" id="candidatos"></div>
-
-<div class="ranking" id="ranking"></div>
-
-<h2>Resultados</h2>
-
-<canvas id="grafica"></canvas>
-
-<script>
-
 let candidatos=[
 
-"Keiko Fujimori",
-"Cesar Acuna",
-"Jorge Nieto Montesinos",
-"Rosario Fernandez",
-"Herbert Caller",
-"Alfonso Lopez Chau",
-"Jose Luna Galvez",
-"Roberto Sanchez",
-"Carlos Jaico",
-"Fernando Olivera",
-"Charlie Carrasco",
-"Marisol Perez Tello",
-"Paul Jaimes",
-"Mesias Guevara",
-"Alvaro Paz de la Barra",
-"George Forsyth",
-"Carlos Alvarez",
-"Francisco Diez Canseco",
-"Wolfgang Grozo",
-"Ricardo Belmont",
-"Napoleon Becerra",
-"Ronald Atencio",
-"Yonhy Lescano",
-"Mario Vizcarra",
-"Joaquin Masse Fernandez",
-"Enrique Valderrama",
-"Alex Gonzales Castillo",
-"Roberto Chiabra",
-"Rafael Belaunde",
-"Carlos Espa",
-"Antonio Ortiz Villano",
-"Fiorella Molinelli",
-"Vladimir Cerron",
-"Walter Chirinos",
-"Rafael Lopez Aliaga",
-"Jose Williams"
+{
+nombre:"Keiko Fujimori",
+foto:"https://upload.wikimedia.org/wikipedia/commons/0/0f/Keiko_Fujimori_in_Government_Palace_in_2017.jpg",
+logo:"https://upload.wikimedia.org/wikipedia/commons/6/6e/Fuerza_Popular_logo.svg"
+},
+
+{
+nombre:"Cesar Acuna",
+foto:"https://upload.wikimedia.org/wikipedia/commons/9/9e/Cesar_Acuna_Peru.jpg",
+logo:"https://upload.wikimedia.org/wikipedia/commons/2/20/Alianza_para_el_Progreso_logo.png"
+},
+
+{
+nombre:"Rafael Lopez Aliaga",
+foto:"https://upload.wikimedia.org/wikipedia/commons/7/71/Rafael_Lopez_Aliaga.jpg",
+logo:"https://upload.wikimedia.org/wikipedia/commons/7/7b/Renovacion_Popular_logo.svg"
+},
+
+{
+nombre:"Vladimir Cerron",
+foto:"https://upload.wikimedia.org/wikipedia/commons/4/44/Vladimir_Cerron.jpg",
+logo:"https://upload.wikimedia.org/wikipedia/commons/1/16/Peru_Libre_logo.png"
+},
+
+{
+nombre:"George Forsyth",
+foto:"https://upload.wikimedia.org/wikipedia/commons/6/65/George_Forsyth_2019.jpg",
+logo:"https://upload.wikimedia.org/wikipedia/commons/0/0f/Somos_Peru_logo.png"
+},
+
+{
+nombre:"Mesias Guevara",
+foto:"https://upload.wikimedia.org/wikipedia/commons/2/27/Mesias_Guevara.jpg",
+logo:"https://upload.wikimedia.org/wikipedia/commons/4/4b/Partido_Morado_logo.svg"
+},
+
+{
+nombre:"Yonhy Lescano",
+foto:"https://upload.wikimedia.org/wikipedia/commons/5/5e/Yonhy_Lescano.jpg",
+logo:"https://upload.wikimedia.org/wikipedia/commons/3/3b/Accion_Popular_logo.png"
+},
+
+{
+nombre:"Carlos Alvarez",
+foto:"https://upload.wikimedia.org/wikipedia/commons/2/23/Carlos_Alvarez_actor.jpg",
+logo:"https://upload.wikimedia.org/wikipedia/commons/e/e1/Pais_Para_Todos_logo.png"
+}
 
 ]
-
-let votosSi=new Array(candidatos.length).fill(0)
-let votosNo=new Array(candidatos.length).fill(0)
-
-let cont=document.getElementById("candidatos")
-
-candidatos.forEach((c,i)=>{
-
-cont.innerHTML+=`
-
-<div class="card">
-
-<img class="foto" src="https://picsum.photos/300/200?random=${i}">
-
-<h3>${c}</h3>
-
-<img class="logo" src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/55/Flag_of_Peru.svg/120px-Flag_of_Peru.svg.png">
-
-<p>SI: <span id="si${i}">0</span></p>
-<p>NO: <span id="no${i}">0</span></p>
-
-<button class="si" onclick="votarSi(${i})">VOTAR</button>
-<button class="no" onclick="votarNo(${i})">NO VOTAR</button>
-
-</div>
-
-`
-
-})
-
-function votarSi(i){
-
-votosSi[i]++
-document.getElementById("si"+i).innerText=votosSi[i]
-
-actualizar()
-
-}
-
-function votarNo(i){
-
-votosNo[i]++
-document.getElementById("no"+i).innerText=votosNo[i]
-
-actualizar()
-
-}
-
-function actualizar(){
-
-grafica.data.datasets[0].data=votosSi
-grafica.update()
-
-ranking()
-
-}
-
-function ranking(){
-
-let datos=candidatos.map((c,i)=>({nombre:c,votos:votosSi[i]}))
-
-datos.sort((a,b)=>b.votos-a.votos)
-
-document.getElementById("ranking").innerHTML=
-
-"🥇 "+datos[0].nombre+
-"<br>🥈 "+datos[1].nombre+
-"<br>🥉 "+datos[2].nombre
-
-}
-
-let ctx=document.getElementById("grafica")
-
-let grafica=new Chart(ctx,{
-
-type:"bar",
-
-data:{
-
-labels:candidatos,
-
-datasets:[{
-
-label:"Votos SI",
-
-data:votosSi
-
-}]
-
-}
-
-})
-
-</script>
-
-</body>
-</html>
