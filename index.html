@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>Simulación Electoral Perú 2026</title>
+<title>Simulación Electoral Perú</title>
 
 <style>
 
@@ -96,22 +96,18 @@ border-radius:10px;
 box-shadow:0 3px 10px rgba(0,0,0,0.15);
 }
 
-#ranking h2{
-text-align:center;
-}
-
 </style>
 </head>
 
 <body>
 
-<header>Simulación Electoral Perú 2026</header>
+<header>Simulación Electoral Perú</header>
 
 <div class="controles">
 
 <label>Selecciona tu departamento:</label>
 
-<select id="departamento">
+<select>
 
 <option>Amazonas</option>
 <option>Áncash</option>
@@ -159,7 +155,7 @@ text-align:center;
 
 let total=0;
 
-const candidatos=[
+const nombres=[
 
 "José Daniel Williams Zapata",
 "Keiko Sofía Fujimori Higuchi",
@@ -200,13 +196,11 @@ const candidatos=[
 
 ];
 
-let datos=[];
+let datos=nombres.map(n=>({nombre:n,si:0,no:0}));
 
 const contenedor=document.getElementById("candidatos");
 
-candidatos.forEach((nombre,i)=>{
-
-datos.push({nombre:nombre,votos:0});
+datos.forEach((candidato,i)=>{
 
 let card=document.createElement("div");
 card.className="card";
@@ -215,7 +209,7 @@ card.innerHTML=`
 
 <img src="img/candidato${i+1}.jpg" class="foto">
 
-<h3>${nombre}</h3>
+<h3>${candidato.nombre}</h3>
 
 <img src="img/logo${i+1}.png" class="logo">
 
@@ -224,19 +218,40 @@ card.innerHTML=`
 <button class="votar">VOTAR</button>
 <button class="no">NO VOTAR</button>
 
-<div class="votos">Votos: <span>0</span></div>
+<div class="votos">
+
+Sí: <span class="si">0</span> |
+No: <span class="noV">0</span>
+
+</div>
 
 `;
 
-let votarBtn=card.querySelector(".votar");
-let texto=card.querySelector("span");
+let btnSi=card.querySelector(".votar");
+let btnNo=card.querySelector(".no");
 
-votarBtn.onclick=()=>{
+let textoSi=card.querySelector(".si");
+let textoNo=card.querySelector(".noV");
 
-datos[i].votos++;
+btnSi.onclick=()=>{
+
+candidato.si++;
 total++;
 
-texto.innerText=datos[i].votos;
+textoSi.innerText=candidato.si;
+
+document.getElementById("total").innerText="Total votos: "+total;
+
+actualizarRanking();
+
+};
+
+btnNo.onclick=()=>{
+
+candidato.no++;
+total++;
+
+textoNo.innerText=candidato.no;
 
 document.getElementById("total").innerText="Total votos: "+total;
 
@@ -250,7 +265,7 @@ contenedor.appendChild(card);
 
 function actualizarRanking(){
 
-let orden=[...datos].sort((a,b)=>b.votos-a.votos);
+let orden=[...datos].sort((a,b)=>b.si-a.si);
 
 let lista=document.getElementById("listaRanking");
 
@@ -260,7 +275,7 @@ orden.forEach(c=>{
 
 let li=document.createElement("li");
 
-li.innerText=c.nombre+" - "+c.votos+" votos";
+li.innerText=c.nombre+" - "+c.si+" votos";
 
 lista.appendChild(li);
 
