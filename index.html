@@ -1,70 +1,76 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>Votación Perú 2026</title>
-
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<title>Registro de votos Perú</title>
 
 <style>
 
 body{
 font-family:Arial;
-background:#f2f2f2;
+background:#f4f4f4;
 text-align:center;
 }
 
-header{
-background:#d60000;
+h1{
+background:#c40000;
 color:white;
-padding:15px;
-font-size:28px;
-font-weight:bold;
+padding:12px;
 }
 
-.container{
-display:flex;
-flex-wrap:wrap;
-justify-content:center;
+select{
+padding:10px;
+font-size:16px;
+margin:15px;
+}
+
+.grid{
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:20px;
+padding:20px;
 }
 
 .card{
 background:white;
+padding:15px;
 border-radius:10px;
-box-shadow:0 2px 6px rgba(0,0,0,0.2);
-width:220px;
-margin:12px;
-padding:12px;
+box-shadow:0 0 8px rgba(0,0,0,0.2);
 }
 
-.foto{
-width:100%;
-height:200px;
+.card img{
+width:110px;
+height:110px;
+border-radius:50%;
 object-fit:cover;
-border-radius:8px;
 }
 
 .logo{
-width:60px;
+width:45px;
 margin-top:5px;
 }
 
 button{
-padding:8px 12px;
-margin:4px;
+padding:8px 15px;
+margin:5px;
 border:none;
 border-radius:5px;
 cursor:pointer;
 }
 
-.si{
-background:#28a745;
+.votar{
+background:green;
 color:white;
 }
 
 .no{
-background:#dc3545;
+background:red;
 color:white;
+}
+
+#ranking{
+margin-top:40px;
+font-size:18px;
 }
 
 </style>
@@ -72,152 +78,146 @@ color:white;
 
 <body>
 
-<header>
-PERÚ REGISTRO DE VOTOS
-</header>
-
-<h3>Selecciona tu departamento</h3>
+<h1>Registro de votos - Perú</h1>
 
 <select>
 
-<option>Lima</option>
-<option>Callao</option>
+<option>Seleccionar departamento</option>
+
 <option>Amazonas</option>
-<option>Ancash</option>
-<option>Apurimac</option>
+<option>Áncash</option>
+<option>Apurímac</option>
 <option>Arequipa</option>
 <option>Ayacucho</option>
 <option>Cajamarca</option>
+<option>Callao</option>
 <option>Cusco</option>
 <option>Huancavelica</option>
-<option>Huanuco</option>
+<option>Huánuco</option>
 <option>Ica</option>
-<option>Junin</option>
+<option>Junín</option>
 <option>La Libertad</option>
 <option>Lambayeque</option>
+<option>Lima</option>
 <option>Loreto</option>
 <option>Madre de Dios</option>
 <option>Moquegua</option>
 <option>Pasco</option>
 <option>Piura</option>
 <option>Puno</option>
-<option>San Martin</option>
+<option>San Martín</option>
 <option>Tacna</option>
 <option>Tumbes</option>
 <option>Ucayali</option>
 
 </select>
 
-<h2>Candidatos</h2>
+<div class="grid" id="candidatos"></div>
 
-<div class="container" id="candidatos"></div>
+<br>
+<button onclick="mostrarResultados()">VER RESULTADOS</button>
 
-<h2>Resultados</h2>
-
-<canvas id="grafica"></canvas>
+<div id="ranking"></div>
 
 <script>
 
 let candidatos=[
 
-{nombre:"Keiko Fujimori",foto:"imagenes/candidatos/keiko.jpg",logo:"imagenes/logos/fuerzapopular.png"},
-{nombre:"Cesar Acuna",foto:"imagenes/candidatos/acuna.jpg",logo:"imagenes/logos/app.png"},
-{nombre:"Jorge Nieto",foto:"imagenes/candidatos/nieto.jpg",logo:"imagenes/logos/buengobierno.png"},
-{nombre:"Rosario Fernandez",foto:"imagenes/candidatos/rosario.jpg",logo:"imagenes/logos/caminodiferente.png"},
-{nombre:"Herbert Caller",foto:"imagenes/candidatos/caller.jpg",logo:"imagenes/logos/patriotico.png"},
-{nombre:"Alfonso Lopez Chau",foto:"imagenes/candidatos/lopezchau.jpg",logo:"imagenes/logos/ahoranacion.png"},
-{nombre:"Jose Luna Galvez",foto:"imagenes/candidatos/luna.jpg",logo:"imagenes/logos/podemos.png"},
-{nombre:"Roberto Sanchez",foto:"imagenes/candidatos/sanchez.jpg",logo:"imagenes/logos/juntos.png"},
-{nombre:"Carlos Jaico",foto:"imagenes/candidatos/jaico.jpg",logo:"imagenes/logos/perumoderno.png"},
-{nombre:"Fernando Olivera",foto:"imagenes/candidatos/olivera.jpg",logo:"imagenes/logos/frenteesperanza.png"},
-{nombre:"Charlie Carrasco",foto:"imagenes/candidatos/carrasco.jpg",logo:"imagenes/logos/democrata.png"},
-{nombre:"Marisol Perez Tello",foto:"imagenes/candidatos/pereztello.jpg",logo:"imagenes/logos/primerogente.png"},
-{nombre:"Paul Jaimes",foto:"imagenes/candidatos/jaimes.jpg",logo:"imagenes/logos/progresemos.png"},
-{nombre:"Mesias Guevara",foto:"imagenes/candidatos/guevara.jpg",logo:"imagenes/logos/morado.png"},
-{nombre:"Alvaro Paz de la Barra",foto:"imagenes/candidatos/pazdelabarra.jpg",logo:"imagenes/logos/feenelperu.png"},
-{nombre:"George Forsyth",foto:"imagenes/candidatos/forsyth.jpg",logo:"imagenes/logos/somosperu.png"},
-{nombre:"Carlos Alvarez",foto:"imagenes/candidatos/alvarez.jpg",logo:"imagenes/logos/paisparatodos.png"},
-{nombre:"Francisco Diez Canseco",foto:"imagenes/candidatos/diezcanseco.jpg",logo:"imagenes/logos/peruaccion.png"},
-{nombre:"Wolfgang Grozo",foto:"imagenes/candidatos/grozo.jpg",logo:"imagenes/logos/integridad.png"},
-{nombre:"Ricardo Belmont",foto:"imagenes/candidatos/belmont.jpg",logo:"imagenes/logos/obras.png"},
-{nombre:"Napoleon Becerra",foto:"imagenes/candidatos/becerra.jpg",logo:"imagenes/logos/trabajadores.png"},
-{nombre:"Ronald Atencio",foto:"imagenes/candidatos/atencio.jpg",logo:"imagenes/logos/venceremos.png"},
-{nombre:"Yonhy Lescano",foto:"imagenes/candidatos/lescano.jpg",logo:"imagenes/logos/cooperacion.png"},
-{nombre:"Mario Vizcarra",foto:"imagenes/candidatos/vizcarra.jpg",logo:"imagenes/logos/peruprimero.png"},
-{nombre:"Joaquin Masse",foto:"imagenes/candidatos/masse.jpg",logo:"imagenes/logos/federal.png"},
-{nombre:"Enrique Valderrama",foto:"imagenes/candidatos/valderrama.jpg",logo:"imagenes/logos/apra.png"},
-{nombre:"Alex Gonzales",foto:"imagenes/candidatos/gonzales.jpg",logo:"imagenes/logos/verde.png"},
-{nombre:"Roberto Chiabra",foto:"imagenes/candidatos/chiabra.jpg",logo:"imagenes/logos/unidad.png"},
-{nombre:"Rafael Belaunde",foto:"imagenes/candidatos/belaunde.jpg",logo:"imagenes/logos/libertad.png"},
-{nombre:"Carlos Espa",foto:"imagenes/candidatos/espa.jpg",logo:"imagenes/logos/sicreo.png"},
-{nombre:"Antonio Ortiz",foto:"imagenes/candidatos/ortiz.jpg",logo:"imagenes/logos/salvemos.png"},
-{nombre:"Fiorella Molinelli",foto:"imagenes/candidatos/molinelli.jpg",logo:"imagenes/logos/fuerzaylibertad.png"},
-{nombre:"Vladimir Cerron",foto:"imagenes/candidatos/cerron.jpg",logo:"imagenes/logos/perulibre.png"},
-{nombre:"Walter Chirinos",foto:"imagenes/candidatos/chirinos.jpg",logo:"imagenes/logos/prin.png"},
-{nombre:"Rafael Lopez Aliaga",foto:"imagenes/candidatos/lopezaliaga.jpg",logo:"imagenes/logos/renovacion.png"},
-{nombre:"Jose Williams",foto:"imagenes/candidatos/williams.jpg",logo:"imagenes/logos/avanzapais.png"}
+{nombre:"Keiko Fujimori",foto:"foto1.jpg",logo:"logo1.png",votos:0},
+{nombre:"Rafael López Aliaga",foto:"foto2.jpg",logo:"logo2.png",votos:0},
+{nombre:"Carlos Álvarez",foto:"foto3.jpg",logo:"logo3.png",votos:0},
 
-]
+{nombre:"Candidato 4",foto:"foto4.jpg",logo:"logo4.png",votos:0},
+{nombre:"Candidato 5",foto:"foto5.jpg",logo:"logo5.png",votos:0},
+{nombre:"Candidato 6",foto:"foto6.jpg",logo:"logo6.png",votos:0},
+{nombre:"Candidato 7",foto:"foto7.jpg",logo:"logo7.png",votos:0},
+{nombre:"Candidato 8",foto:"foto8.jpg",logo:"logo8.png",votos:0},
+{nombre:"Candidato 9",foto:"foto9.jpg",logo:"logo9.png",votos:0},
+{nombre:"Candidato 10",foto:"foto10.jpg",logo:"logo10.png",votos:0},
 
-let votosSi=new Array(candidatos.length).fill(0)
+{nombre:"Candidato 11",foto:"foto11.jpg",logo:"logo11.png",votos:0},
+{nombre:"Candidato 12",foto:"foto12.jpg",logo:"logo12.png",votos:0},
+{nombre:"Candidato 13",foto:"foto13.jpg",logo:"logo13.png",votos:0},
+{nombre:"Candidato 14",foto:"foto14.jpg",logo:"logo14.png",votos:0},
+{nombre:"Candidato 15",foto:"foto15.jpg",logo:"logo15.png",votos:0},
+{nombre:"Candidato 16",foto:"foto16.jpg",logo:"logo16.png",votos:0},
+{nombre:"Candidato 17",foto:"foto17.jpg",logo:"logo17.png",votos:0},
+{nombre:"Candidato 18",foto:"foto18.jpg",logo:"logo18.png",votos:0},
+{nombre:"Candidato 19",foto:"foto19.jpg",logo:"logo19.png",votos:0},
+{nombre:"Candidato 20",foto:"foto20.jpg",logo:"logo20.png",votos:0},
 
-let cont=document.getElementById("candidatos")
+{nombre:"Candidato 21",foto:"foto21.jpg",logo:"logo21.png",votos:0},
+{nombre:"Candidato 22",foto:"foto22.jpg",logo:"logo22.png",votos:0},
+{nombre:"Candidato 23",foto:"foto23.jpg",logo:"logo23.png",votos:0},
+{nombre:"Candidato 24",foto:"foto24.jpg",logo:"logo24.png",votos:0},
+{nombre:"Candidato 25",foto:"foto25.jpg",logo:"logo25.png",votos:0},
+{nombre:"Candidato 26",foto:"foto26.jpg",logo:"logo26.png",votos:0},
+{nombre:"Candidato 27",foto:"foto27.jpg",logo:"logo27.png",votos:0},
+{nombre:"Candidato 28",foto:"foto28.jpg",logo:"logo28.png",votos:0},
+{nombre:"Candidato 29",foto:"foto29.jpg",logo:"logo29.png",votos:0},
+{nombre:"Candidato 30",foto:"foto30.jpg",logo:"logo30.png",votos:0},
+
+{nombre:"Candidato 31",foto:"foto31.jpg",logo:"logo31.png",votos:0},
+{nombre:"Candidato 32",foto:"foto32.jpg",logo:"logo32.png",votos:0},
+{nombre:"Candidato 33",foto:"foto33.jpg",logo:"logo33.png",votos:0},
+{nombre:"Candidato 34",foto:"foto34.jpg",logo:"logo34.png",votos:0},
+{nombre:"Candidato 35",foto:"foto35.jpg",logo:"logo35.png",votos:0},
+{nombre:"Candidato 36",foto:"foto36.jpg",logo:"logo36.png",votos:0}
+
+];
+
+let contenedor=document.getElementById("candidatos");
 
 candidatos.forEach((c,i)=>{
 
-cont.innerHTML+=`
+contenedor.innerHTML+=`
 
 <div class="card">
 
-<img class="foto" src="${c.foto}">
-
+<img src="${c.foto}">
 <h3>${c.nombre}</h3>
-
 <img class="logo" src="${c.logo}">
 
-<p>SI: <span id="si${i}">0</span></p>
+<br>
 
-<button class="si" onclick="votarSi(${i})">VOTAR</button>
+<button class="votar" onclick="votar(${i})">VOTAR</button>
+<button class="no">NO VOTAR</button>
+
+<p>Votos: <span id="v${i}">0</span></p>
 
 </div>
 
-`
+`;
 
-})
+});
 
-function votarSi(i){
+function votar(i){
 
-votosSi[i]++
+candidatos[i].votos++;
 
-document.getElementById("si"+i).innerText=votosSi[i]
-
-grafica.data.datasets[0].data=votosSi
-
-grafica.update()
+document.getElementById("v"+i).innerText=candidatos[i].votos;
 
 }
 
-let ctx=document.getElementById("grafica")
+function mostrarResultados(){
 
-let grafica=new Chart(ctx,{
+let total=candidatos.reduce((a,b)=>a+b.votos,0);
 
-type:"bar",
+let ranking=[...candidatos].sort((a,b)=>b.votos-a.votos);
 
-data:{
+let html="<h2>Ranking</h2>";
 
-labels:candidatos.map(c=>c.nombre),
+ranking.forEach((c,i)=>{
 
-datasets:[{
+let porcentaje= total? ((c.votos/total)*100).toFixed(1):0;
 
-label:"Votos",
+html+=`${i+1}° ${c.nombre} - ${c.votos} votos (${porcentaje}%)<br>`;
 
-data:votosSi
+});
 
-}]
+document.getElementById("ranking").innerHTML=html;
 
 }
-
-})
 
 </script>
 
